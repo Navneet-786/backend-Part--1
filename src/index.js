@@ -1,9 +1,19 @@
 require("dotenv").config();
-const express = require("express");
-const app = express();
+const { app } = require("./app");
 const { connectToDB } = require("./db/index");
-connectToDB();
+
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log("server is listen at port :", PORT);
-});
+
+connectToDB()
+  .then(() => {
+    app.on("error", (err) => {
+      console.error(`server error : ${err}`);
+    });
+    app.listen(PORT, () => {
+      console.log("server is listen at port :", PORT);
+    });
+  })
+  .catch((err) => {
+    console.log(`Something configuration error: ${err}`);
+    process.exit(1);
+  });
