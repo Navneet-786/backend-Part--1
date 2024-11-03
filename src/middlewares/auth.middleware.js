@@ -21,7 +21,7 @@ const verifyJwt = asyncHandler(async (req, _, next) => {
     const user = await User.findById(decodedToken.id).select(
       "-password -refreshToken"
     );
-
+    console.log("-------->", user);
     if (!user) {
       throw new ApiError(401, "Inavlid request ");
     }
